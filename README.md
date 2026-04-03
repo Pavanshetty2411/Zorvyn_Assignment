@@ -370,10 +370,12 @@ The system handles:
 
 Example:
 
+```json
 {
 "amount": "Amount must be positive",
 "category": "Category cannot be empty"
 }
+```
 
 ---
 
@@ -412,10 +414,13 @@ Example:
 
 3. Configure application.properties
 
+```
 spring.datasource.url=jdbc:mysql://localhost:3306/finance_db
 spring.datasource.username=root
 spring.datasource.password=yourpassword
 spring.jpa.hibernate.ddl-auto=update
+
+```
 
 4. Run application
    mvn spring-boot:run
