@@ -13,7 +13,15 @@ The system is designed to:
 * Provide dashboard analytics
 * Enforce role-based access control
 
-The focus of this project is **clean backend design, proper data handling, and logical access control**, rather than just CRUD operations.
+This is not just CRUD — it demonstrates **real backend architecture, security, and data handling**.
+
+---
+
+## 🌐 Live API
+
+```text
+https://pavanshetty-zorvyn-assignment.up.railway.app
+```
 
 ---
 
@@ -23,69 +31,143 @@ The focus of this project is **clean backend design, proper data handling, and l
 * Spring Boot
 * Spring Security + JWT
 * Spring Data JPA
-* MySQL
+* MySQL (Railway)
 * Maven
 
 ---
 
 ## 🧠 System Design
 
-The application follows a layered architecture:
-
+```
 controller → service → repository → database
+```
 
 ### 📂 Project Structure
 
-src/main/java/com/assignment/zorvyn
-
-* controller → API endpoints
-* service → Business logic
-* repository → Database interaction
-* entity → Data models
-* dto → Response structures
-* security → JWT & filters
-* config → Security configuration
-* exception → Global error handling
+```
+controller → API endpoints  
+service → Business logic  
+repository → DB interaction  
+entity → Models  
+dto → Data transfer  
+security → JWT + filters  
+config → Security config  
+exception → Error handling  
+```
 
 ---
 
 ## 👥 Role-Based Access Control
 
-| Role    | Permissions                |
-| ------- | -------------------------- |
-| ADMIN   | Full access (CRUD + users) |
-| ANALYST | Read records + dashboard   |
-| VIEWER  | Read-only access           |
+| Role    | Permissions      |
+| ------- | ---------------- |
+| ADMIN   | Full access      |
+| ANALYST | Read + dashboard |
+| VIEWER  | Read-only        |
 
 ---
 
-## 🔐 Authentication
+# 🔐 Authentication
 
 JWT-based authentication is implemented.
 
-### Login
+---
 
-POST /api/auth/login?email=[admin@test.com](mailto:admin@test.com)&password=1234
+## 🔹 Login
 
-Returns a JWT token.
+POST
+`/api/auth/login`
 
 ---
 
-## 📡 API Endpoints
+## 🧪 How to Execute Login
 
----
+1. Open Postman
+2. Select **POST method**
+3. Enter:
 
-### 👤 User Management (ADMIN Only)
-
-#### 🔹 Create User
-
-```http
-POST /api/users
+```
+https://pavanshetty-zorvyn-assignment.up.railway.app/api/auth/login?email=admin@test.com&password=1234
 ```
 
-**Description:** Creates a new user with a specific role.
+4. Click **Send**
 
-**Sample Body:**
+---
+
+## ✅ Response
+
+You will get a JWT token:
+
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+---
+
+## 🔑 How to Use the Token
+
+All APIs (except login) require this token.
+
+---
+
+### 🔹 Steps
+
+1. Copy the token
+2. Open any request in Postman
+3. Go to **Headers**
+4. Add:
+
+```
+Key: Authorization
+Value: Bearer <TOKEN>
+```
+
+---
+
+### ✅ Example
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+---
+
+### ⚠️ Important
+
+* Always include `Bearer`
+* Add space after `Bearer`
+* Without token → 403 error (expected)
+
+---
+
+# 📡 API Endpoints
+
+---
+
+# 👤 User Management (ADMIN Only)
+
+---
+
+### 🔹 Create User
+
+POST
+`/api/users`
+
+**How to Execute:**
+
+* URL:
+
+```
+https://pavanshetty-zorvyn-assignment.up.railway.app/api/users
+```
+
+* Headers:
+
+```
+Authorization: Bearer <TOKEN>
+```
+
+* Body:
 
 ```json
 {
@@ -97,97 +179,58 @@ POST /api/users
 }
 ```
 
-**Response:**
+---
 
-```json
-{
-  "id": 4,
-  "name": "Test User",
-  "role": "VIEWER"
-}
-```
+### 🔹 Get All Users
+
+GET
+`/api/users`
 
 ---
 
-#### 🔹 Get All Users
+### 🔹 Get User by ID
 
-```http
-GET /api/users
-```
-
-**Description:** Returns list of all users.
+GET
+`/api/users/{id}`
 
 ---
 
-#### 🔹 Get User by ID
+### 🔹 Update User
 
-```http
-GET /api/users/{id}
-```
-
-**Description:** Fetch a specific user.
+PUT
+`/api/users/{id}`
 
 ---
 
-#### 🔹 Update User
+### 🔹 Delete User
 
-```http
-PUT /api/users/{id}
-```
-
-**Description:** Updates user details.
+DELETE
+`/api/users/{id}`
 
 ---
 
-#### 🔹 Delete User
+### 🔹 Update Role
 
-```http
-DELETE /api/users/{id}
-```
-
-**Description:** Deletes a user.
+PATCH
+`/api/users/{id}/role?role=ADMIN`
 
 ---
 
-#### 🔹 Update User Role
+### 🔹 Activate/Deactivate
 
-```http
-PATCH /api/users/{id}/role?role=ADMIN
-```
-
-**Description:** Changes role of user.
+PATCH
+`/api/users/{id}/status?active=false`
 
 ---
 
-#### 🔹 Activate/Deactivate User
-
-```http
-PATCH /api/users/{id}/status?active=false
-```
-
-**Description:** Enables or disables user access.
+# 💰 Financial Records
 
 ---
 
-### 💰 Financial Records
+### 🔹 Create Record
 
-#### 🔹 Get All Records
-
-```http
-GET /api/records
-```
-
-**Description:** Fetch all financial records.
-
----
-
-#### 🔹 Create Record
-
-```http
-POST /api/records
-```
-
-**Sample Body:**
+POST
+`/api/records`
 
 ```json
 {
@@ -199,254 +242,125 @@ POST /api/records
 }
 ```
 
-**Response:**
+---
 
-```json
-{
-  "id": 10,
-  "amount": 1000,
-  "type": "EXPENSE"
-}
-```
+### 🔹 Get All Records
+
+GET
+`/api/records`
 
 ---
 
-#### 🔹 Update Record
+### 🔹 Update Record
 
-```http
-PUT /api/records/{id}
-```
-
-**Description:** Updates existing record.
+PUT
+`/api/records/{id}`
 
 ---
 
-#### 🔹 Delete Record
+### 🔹 Delete Record
 
-```http
-DELETE /api/records/{id}
-```
-
-**Description:** Deletes a record.
+DELETE
+`/api/records/{id}`
 
 ---
 
-### 🔍 Filtering Records
+# 🔍 Filtering
 
-```http
-GET /api/records/filter
+GET
+`/api/records/filter`
+
+Examples:
+
 ```
-
-**Description:** Fetch records based on conditions.
-
-**Examples:**
-
-```http
 /api/records/filter?type=EXPENSE
 /api/records/filter?category=Food
 /api/records/filter?startDate=2026-01-01&endDate=2026-04-01
 ```
 
-**Response:**
+---
 
-```json
-[
-  {
-    "amount": 2000,
-    "category": "Food"
-  }
-]
-```
+# 📄 Pagination
+
+GET
+`/api/records/paged?page=0&size=5`
 
 ---
 
-### 📄 Pagination
-
-```http
-GET /api/records/paged?page=0&size=5
-```
-
-**Description:** Returns records page by page.
-
-**Response:**
-
-```json
-{
-  "content": [...],
-  "totalPages": 3,
-  "totalElements": 15
-}
-```
+# 📊 Dashboard APIs
 
 ---
 
-### 📊 Dashboard APIs
+### 🔹 Summary
+
+GET
+`/api/dashboard/summary`
 
 ---
 
-#### 🔹 Summary
+### 🔹 Category Summary
 
-```http
-GET /api/dashboard/summary
-```
-
-**Description:** Returns overall financial summary.
-
-**Response:**
-
-```json
-{
-  "totalIncome": 16000,
-  "totalExpense": 6500,
-  "netBalance": 9500
-}
-```
+GET
+`/api/dashboard/category-summary`
 
 ---
 
-#### 🔹 Category Summary
+### 🔹 Recent Activity
 
-```http
-GET /api/dashboard/category-summary
-```
-
-**Description:** Total spending grouped by category.
-
-**Response:**
-
-```json
-[
-  {
-    "category": "Food",
-    "total": 2000
-  }
-]
-```
+GET
+`/api/dashboard/recent`
 
 ---
 
-#### 🔹 Recent Activity
+### 🔹 Monthly Trends
 
-```http
-GET /api/dashboard/recent
-```
-
-**Description:** Returns latest transactions.
+GET
+`/api/dashboard/monthly-trends`
 
 ---
 
-#### 🔹 Monthly Trends
+# 🧪 Testing Flow
 
-```http
-GET /api/dashboard/monthly-trends
-```
+Follow this EXACT order:
 
-**Description:** Shows monthly aggregated data.
-
-**Response:**
-
-```json
-[
-  {
-    "month": 1,
-    "total": 5000
-  }
-]
-```
+1. Login → get token
+2. Add token in headers
+3. Test APIs
+4. Verify role-based access
 
 ---
 
+# ⚠️ Important Notes
+
+* Browser access → 403 (expected)
+* Always use Postman
+* JWT is mandatory
 
 ---
 
-## 🧪 Validation & Error Handling
+# 🗄️ Database
 
-The system handles:
+Hosted on Railway MySQL
+
+Tables:
+
+* users
+* financial_record
+
+---
+
+# 🧪 Validation & Error Handling
+
+Handles:
 
 * Invalid input
 * Missing fields
-* Invalid roles
+* Unauthorized access
 * Resource not found
 
-Example:
-
-```json
-{
-"amount": "Amount must be positive",
-"category": "Category cannot be empty"
-}
-```
-
 ---
 
-## 🗄️ Database Schema
-
-### Users Table
-
-* id
-* name
-* email
-* password
-* role
-* active
-
----
-
-### Financial Records Table
-
-* id
-* amount
-* type
-* category
-* date
-* description
-* user_id
-
----
-
-## ⚙️ Setup Instructions
-
-1. Clone repository
-   git clone <your-repo-link>
-
-2. Create database
-   CREATE DATABASE finance_db;
-
-3. Configure application.properties
-
-```
-spring.datasource.url=jdbc:mysql://localhost:3306/finance_db
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-spring.jpa.hibernate.ddl-auto=update
-
-```
-
-4. Run application
-   mvn spring-boot:run
-
----
-
-## 🧪 Testing Flow
-
-1. Login → get JWT
-2. Test ADMIN endpoints
-3. Test ANALYST restrictions
-4. Test VIEWER restrictions
-5. Test dashboard APIs
-
----
-
-## ⚠️ Assumptions
-
-* Single currency system
-* No multi-user sharing
-* Password stored as plain text (for simplicity)
-* JWT used for authentication
-
----
-
-## 🚀 Features Implemented
+# 🚀 Features
 
 * JWT Authentication
 * Role-based access control
@@ -454,29 +368,27 @@ spring.jpa.hibernate.ddl-auto=update
 * Filtering
 * Pagination
 * Dashboard analytics
-* Validation & error handling
 
 ---
 
-## 💡 Future Improvements
+# 💡 Future Improvements
 
 * Password encryption (BCrypt)
 * Swagger documentation
 * Unit testing
 * Rate limiting
-* Soft delete
 
 ---
 
-## 🧠 Final Thoughts
+# 🧠 Final Thoughts
 
 This project demonstrates:
 
-* Clean architecture
-* Backend design thinking
-* Secure access control
-* Efficient data handling
+* Clean backend architecture
+* Secure API design
+* Role-based logic
+* Scalable data handling
 
-The goal was to build a **well-structured backend system**, not just a CRUD application.
+The goal was to build a **production-like backend**, not just a basic CRUD system.
 
 ---
